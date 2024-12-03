@@ -67,14 +67,11 @@ int main(int argc, char *argv[]) {
     int width;
     int tempX;
     int tempY;
-    if(argv[1] == nullptr) {
-   std::filesystem::path p = "dfgfdf";
-
-    } else {
-	 std::filesystem::path p = argv[1];
-
+    if(argv[1] == nullptr){ 
+	return 0;
     }
-    if(argv[1] == nullptr){
+	std::filesystem::path p = argv[1];
+    if(!std::filesystem::exists(p)){
         
         int y = 0;
         std::cout << "Enter X of image: ";
