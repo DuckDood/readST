@@ -2,7 +2,8 @@
 #include <fstream>
 #include <termios.h>
 #include <stdio.h>
-
+#include <filesystem>
+#include <unistd.h>
 static struct termios old, current;
 
 /* Initialize new terminal i/o settings */
@@ -49,9 +50,67 @@ char getche(void)
 
 
 int main(int argc, char* argv[]){
+std::filesystem::path pa = argv[1];
+
+    if(pa.extension() == ".stai") {
+        
+    std::string f;
+    std::string len;
+    std::string del;
+    int pos;
+    std::string token = "";
+    std::fstream y(argv[1]);
+	std::string loops;
+y >> f;
+pos = f.find('(');
+bool loop = f.find(".l") != f.npos;
+if (loop){
+loops = f;
+}
+for(pos++; f.at(pos) != ')'; pos++) {
+token += f.at(pos);
+}
+len = token;
+token = "";
+
+pos = f.find('<');
+for(pos++; f.at(pos) != '>'; pos++) {
+token += f.at(pos);
+}
+del = token;
+token = "";
+while (loop) {
+for (int i = 0; i < atoi(len.c_str());i++) {
+
+system("clear");
+std::cout << ReturnImage(f);
+usleep(atoi(del.c_str())*1000);
+f.erase(0, f.find("endendend")+9);
+}
+f=loops;
+}
+for (int i = 0; i < atoi(len.c_str());i++) {
+
+std::cout << ReturnImage(f);
+usleep(atoi(del.c_str())*1000);
+system("clear");
+f.erase(0, f.find("endendend")+9);
+}
+
+}
+else {
+
+
+
+
+
+
+
+
+
     std::string f;
     std::fstream y(argv[1]);
 y >> f;
 std::cout << ReturnImage(f);
-getch();
+}
 }
