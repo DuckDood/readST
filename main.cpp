@@ -112,5 +112,8 @@ else {
     std::fstream y(argv[1]);
 y >> f;
 std::cout << ReturnImage(f);
+if(argv[2] != nullptr) {
+	getch();
+}
 }
 }
