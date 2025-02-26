@@ -4,7 +4,32 @@
 #include <stdio.h>
 #include <filesystem>
 #include <unistd.h>
+#include <stdlib.h>
+#include <csignal>
 static struct termios old, current;
+
+
+static void enter_alt_screen(void)
+{
+    system("tput smcup");
+}
+static void leave_alt_screen(void)
+{
+    system("tput rmcup");
+}
+
+
+void signalHandler( int signum ) {
+	leave_alt_screen();
+   // cleanup and close up stuff here  
+   // terminate program  
+
+   exit(signum);  
+}
+
+
+
+
 
 /* Initialize new terminal i/o settings */
 void initTermios(int echo) 
@@ -50,10 +75,13 @@ char getche(void)
 
 
 int main(int argc, char* argv[]){
+signal(SIGINT, signalHandler); 
+signal(SIGQUIT, signalHandler); 
+
 std::filesystem::path pa = argv[1];
 
     if(pa.extension() == ".stai") {
-        
+        enter_alt_screen();
     std::string f;
     std::string len;
     std::string del;
@@ -90,7 +118,6 @@ f.erase(0, f.find("endendend")+9);
 f=loops;
 }
 for (int i = 0; i < atoi(len.c_str());i++) {
-
 std::cout << ReturnImage(f);
 usleep(atoi(del.c_str())*1000);
 system("clear");
@@ -111,9 +138,13 @@ else {
     std::string f;
     std::fstream y(argv[1]);
 y >> f;
-std::cout << ReturnImage(f);
 if(argv[2] != nullptr) {
+	enter_alt_screen();
+	std::cout << ReturnImage(f) << "\033[2000B";
 	getch();
+	leave_alt_screen();
+} else {
+	std::cout << ReturnImage(f);
 }
 }
 }
